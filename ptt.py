@@ -68,7 +68,9 @@ for i in range(0, 20):
     fp = open(tempfile.mkstemp('.in', dir='./article')[1], 'w')
 
     while True:
-        i = tn.expect([top, mid, bot])
+        i = tn.expect([top, mid, bot], 5)
+        if i[0] == -1:
+            print(i[2])
 
         bar = i[1].group(0).decode('big5', 'ignore')
         line_match = re.search('([0-9]+)~([0-9]+)', bar)
@@ -82,7 +84,7 @@ for i in range(0, 20):
             x = '\n'.join(x.split('\n')[n:])
 
         line_int = [line_start, line_end]
-        fp.write(x)
+        fp.write(x + '\n')
         if i[0] == 2:
             break
         send(tn, ' ' + C_L)
