@@ -4,20 +4,34 @@ import glob
 import os
 
 def sub(string):
-    i = re.sub('^\x1b[[0-9;]*m.*\x1b\[m$', '', string, 0, re.MULTILINE)   
-    i = re.sub('\x1b[[0-9;]*[mABCDHJKsu]', '', i)   
-    i = re.sub(r'[作者|標題|時間].*\n', '', i)
-    i = re.sub(r'^[─|※|:].*$\n', '', i)
-    i = re.sub(r'瀏覽.*離開', '', i)
-    i = re.sub(r'[→|推|噓].*[:][ ]', '', i)
-    i = re.sub(r'[0-9]*/[0-9]*[ ]*[0-9]*:[0-9]*$', '', i)
-    i = re.sub(r'[--]', '', i)
-    i = re.sub(r'[ ]*[A-Za-z0-9/:.…_?=]*[ ]*', '', i)
-    i = re.sub(r'^[ ]*|[ ]*$|', '', i)
-    i = re.sub(r'[●■□▲「」％：【】~()（）%"『』〔〕《》[]]*', '', i)
-    i = re.sub(r'[，、。？！；／▲「」％：【】~()（）%"『』〔〕?!,.]*$|^[，、。？！；／▲「」％：【】~()（）%"『』〔〕?!,.]*', '', i)
-    i = re.sub(r'[，、。？！；／?!,.][ ]*|[ ]+', '\n', i)
-    i = re.sub(r'^$\n', '', i)
+    # remove header
+    i = re.sub('\x1b\[34;47m[ ](作者|標題|時間).*\n', '', string)
+    # remove trailer
+    i = re.sub(r'^.*瀏覽.*目前顯示.*離開.*$', '', i, 0, re.MULTILINE)
+    # reply
+    i = re.sub('^\x1b\[1;3.m[→|推|噓].*?[:][ ]*', '', i, 0, re.MULTILINE)
+    # control code
+    i = re.sub('\x1b\[[0-9;]*[mABCDHJKsu]', '', i)   
+    # quote, system info, etc.
+    i = re.sub(r'^[─|※|:].*', '', i, 0, re.MULTILINE)
+    # signature
+    i = re.sub('^--.*--$', '', i, 0, re.MULTILINE | re.DOTALL)
+    # alphabet
+    i = re.sub('[A-Za-z]+', ' ', i)
+    # numbers
+    i = re.sub('[0-9]+', ' ', i)
+    i = re.sub('[１２３４５６７８９０]+', ' ', i)
+    # punctuations
+    i = re.sub('[!@#$%^&*()_+-=,\./;\'\[\]\\<>\?:"{}|`~]+', ' ', i)
+    i = re.sub('[，。　、！？⋯；：]+', ' ', i)
+    i = re.sub('[「」【】（）『』〔〕《》]+', ' ', i)
+    i = re.sub('[％＋＝－＊／＼＃＄＆]+', ' ', i)
+    # shapes
+    i = re.sub('[●•○■□▲]+', ' ', i)
+    # spaces
+    i = re.sub('\s+', '\n', i)
+    # blank lines
+    i = re.sub('^\s+', '', i, 0, re.MULTILINE)
     return i
 
 for _file in glob.glob("./article/*.in"):
@@ -25,8 +39,8 @@ for _file in glob.glob("./article/*.in"):
     output_name = re.sub('in$', 'out', _file)
     fo = open(output_name, "w")
 
-    for line in fi:
-        fo.write(sub(line))
+    x = fi.read()
+    fo.write(sub(x))
 
-    fi.close()
     fo.close()
+    fi.close()
