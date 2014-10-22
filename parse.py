@@ -21,10 +21,16 @@ def sub(string):
     # numbers
     i = re.sub('[0-9]+', ' ', i)
     i = re.sub('[１２３４５６７８９０]+', ' ', i)
-    i = re.sub('[!@#$%^&*()_+-=,\./;\'\[\]\\<>\?:"{}\|`~]+', ' ', i)
+    # punctuations
+    i = re.sub('[!@#$%^&*()_+-=,\./;\'\[\]\\<>\?:"{}|`~]+', ' ', i)
     i = re.sub('[，。　、！？⋯；：]+', ' ', i)
-    i = re.sub('[●■□▲「」％：【】（）%"『』〔〕《》•○]+', ' ', i)
+    i = re.sub('[「」【】（）『』〔〕《》]+', ' ', i)
+    i = re.sub('[％＋＝－＊／＼＃＄＆]+', ' ', i)
+    # shapes
+    i = re.sub('[●•○■□▲]+', ' ', i)
+    # spaces
     i = re.sub('\s+', '\n', i)
+    # blank lines
     i = re.sub('^\s+', '', i, 0, re.MULTILINE)
     return i
 
@@ -36,9 +42,6 @@ for file in glob.glob("*.in"):
 
     x = fi.read()
     fo.write(sub(x))
-
-    #for line in fi:
-    #    fo.write(sub(line))
 
     fo.close()
     fi.close()
