@@ -12,6 +12,8 @@ def sub(string):
     i = re.sub('^\x1b\[1;3.m[→|推|噓].*?[:][ ]*', '', i, 0, re.MULTILINE)
     # control code
     i = re.sub('\x1b\[[0-9;]*[mABCDHJKsu]', '', i)   
+    # backspace
+    i = re.sub('\x08+', '', i)   
     # quote, system info, etc.
     i = re.sub(r'^[─|※|:].*', '', i, 0, re.MULTILINE)
     # signature
@@ -26,9 +28,9 @@ def sub(string):
     i = re.sub('[，。　、！？⋯；：]+', ' ', i)
     i = re.sub('[「」【】（）『』〔〕《》]+', ' ', i)
     i = re.sub('[％＋＝－＊／＼＃＄＆]+', ' ', i)
-    i = re.sub('[╱“”∼─]+', ' ', i)
+    i = re.sub('[╱“”∼─ˍ…]+', ' ', i)
     # shapes
-    i = re.sub('[●•○■□▲]+', ' ', i)
+    i = re.sub('[●•○■□▲◎]+', ' ', i)
     # spaces
     i = re.sub('\s+', '\n', i)
     # blank lines
