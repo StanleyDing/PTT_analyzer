@@ -17,7 +17,7 @@ def sub(string):
     # signature
     i = re.sub('^--.*--$', '', i, 0, re.MULTILINE | re.DOTALL)
     # alphabet
-    i = re.sub('[A-Za-z]+', ' ', i)
+    i = re.sub('[A-Za-zＡ-Ｚ]+', ' ', i)
     # numbers
     i = re.sub('[0-9]+', ' ', i)
     i = re.sub('[１２３４５６７８９０]+', ' ', i)
@@ -26,6 +26,7 @@ def sub(string):
     i = re.sub('[，。　、！？⋯；：]+', ' ', i)
     i = re.sub('[「」【】（）『』〔〕《》]+', ' ', i)
     i = re.sub('[％＋＝－＊／＼＃＄＆]+', ' ', i)
+    i = re.sub('[╱“”∼─]+', ' ', i)
     # shapes
     i = re.sub('[●•○■□▲]+', ' ', i)
     # spaces
