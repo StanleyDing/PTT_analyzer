@@ -30,6 +30,9 @@ def sub(string):
     i = re.sub(r'→ [0-9A-Za-z]*: *(.*) [0-9/]* [0-9:]*$', r'\1', i, 0, re.MULTILINE)
     return i
 
+if os.path.isdir('./article') != True:
+    os.mkdir('article')
+
 tn = telnetlib.Telnet('ptt.cc')
 
 # username
