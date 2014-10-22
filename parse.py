@@ -7,7 +7,7 @@ def sub(string):
     # remove header
     i = re.sub('\x1b\[34;47m[ ](作者|標題|時間).*\n', '', string)
     # remove trailer
-    i = re.sub(r'^.*瀏覽.*目前顯示.*離開.*$\n', '', i, 0, re.MULTILINE)
+    i = re.sub(r'^.*瀏覽.*目前顯示.*離開.*$', '', i, 0, re.MULTILINE)
     # reply
     i = re.sub('^\x1b\[1;3.m[→|推|噓].*?[:][ ]*', '', i, 0, re.MULTILINE)
     # control code
