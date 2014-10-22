@@ -20,11 +20,10 @@ def sub(string):
     i = re.sub(r'^$\n', '', i)
     return i
 
-os.chdir("./article")
-
-for file in glob.glob("*.in"):
-    fi = open(file, "r")
-    fo = open(file+".out", "w")
+for _file in glob.glob("./article/*.in"):
+    fi = open(_file, "r")
+    output_name = re.sub('in$', 'out', _file)
+    fo = open(output_name, "w")
 
     for line in fi:
         fo.write(sub(line))
