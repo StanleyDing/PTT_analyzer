@@ -7,6 +7,7 @@ rn = '\r\n'
 C_L = '\x0C'
 C_Z = '\x1A'
 ESC = '\x1B'
+ARTICLE_SEL = '文章選讀.*進板畫面'
 
 def send(tel, s):
     try:
@@ -24,6 +25,21 @@ def wait(tel, exp, timeout=None):
         print('Connection closed')
     print(r.decode('big5', 'ignore'))
     return r
+
+def next_post(tel):
+    while True:
+        (_, _, b) = tel.expect([ARTICLE_SEL.encode('big5')])
+        string = b.decode('big5', 'ignore')
+        # positioning control
+        string = re.sub('\x1b\[[0-9;]*H', ' ', string)
+        # other control
+        string = re.sub('\x1b\[[0-9;]*[mABCDJKsu]', '', string)
+        # get the author
+        match = re.search('●.*?[0-9]+/[0-9]+[ ]([a-zA-Z0-9]+|-)[ ].*', string)
+        if match.group(1) != '-':
+            break
+        send(tel, 'k' + C_L)
+    send(tel, 'l' + C_L)
 
 if not os.path.isdir('./article'):
     os.mkdir('article')
@@ -54,14 +70,12 @@ send(tn, 'Gossiping' + rn)
 wait(tn, '任意鍵')
 send(tn, rn)
 
-wait(tn, '文章選讀')
-
 top = b'\x1b\[0*;*33;45m.*\x1b\[1;30;47m.*\x1b\[m'
 mid = b'\x1b\[0*;*34;46m.*\x1b\[1;30;47m.*\x1b\[m'
 bot = b'\x1b\[0*;*44m.*\x1b\[1;30;47m.*\x1b\[m'
 
-send(tn, 'l' + C_L)
-for i in range(0, 20):
+for _ in range(0, 1000):
+    next_post(tn)
     line_int = [0, 0]
     fp = open(tempfile.mkstemp('.in', dir='./article')[0], 'w')
 
@@ -87,6 +101,6 @@ for i in range(0, 20):
             break
         send(tn, ' ' + C_L)
     fp.close()
-    send(tn, 'b' + C_L)
+    send(tn, 'qk' + C_L)
 
 tn.close()
