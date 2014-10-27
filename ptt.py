@@ -1,6 +1,7 @@
 import telnetlib
 import re
 import tempfile
+import os
 
 rn = '\r\n'
 C_L = '\x0C'
@@ -24,13 +25,7 @@ def wait(tel, exp, timeout=None):
     print(r.decode('big5', 'ignore'))
     return r
 
-def sub(string):
-    i = re.sub('^\x1b[[0-9;]*m  瀏覽.*', '', string, 1, re.MULTILINE)   
-    i = re.sub('\x1b[[0-9;]*[mABCDHJKsu]', '', i)   
-    i = re.sub(r'→ [0-9A-Za-z]*: *(.*) [0-9/]* [0-9:]*$', r'\1', i, 0, re.MULTILINE)
-    return i
-
-if os.path.isdir('./article') != True:
+if not os.path.isdir('./article'):
     os.mkdir('article')
 
 tn = telnetlib.Telnet('ptt.cc')
