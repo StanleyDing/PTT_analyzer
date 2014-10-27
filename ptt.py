@@ -63,7 +63,7 @@ bot = b'\x1b\[0*;*44m.*\x1b\[1;30;47m.*\x1b\[m'
 send(tn, 'l' + C_L)
 for i in range(0, 20):
     line_int = [0, 0]
-    fp = open(tempfile.mkstemp('.in', dir='./article')[1], 'w')
+    fp = open(tempfile.mkstemp('.in', dir='./article')[0], 'w')
 
     while True:
         i = tn.expect([top, mid, bot], 5)
