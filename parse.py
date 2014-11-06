@@ -29,6 +29,7 @@ def sub(string):
     i = re.sub('[「」【】（）『』〔〕《》]+', ' ', i)
     i = re.sub('[％＋＝－＊／＼＃＄＆]+', ' ', i)
     i = re.sub('[╱“”∼─ˍ…]+', ' ', i)
+    i = re.sub('[＿→ˊˋ╭╮╰╯]+', ' ', i)
     # shapes
     i = re.sub('[●•○■□▲◎]+', ' ', i)
     # spaces
